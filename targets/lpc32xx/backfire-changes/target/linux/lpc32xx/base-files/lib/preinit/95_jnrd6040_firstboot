@@ -1,0 +1,85 @@
+#!/bin/sh
+
+
+jnrd6040_firstboot_program_jn516x() {
+
+    f=`ls /usr/share/JennicModuleProgrammer/*.bin | head -1`
+
+    if [ -n $f ]
+    then
+        echo "Programming JN516x device with firmware $f"
+
+        /usr/bin/JennicModuleProgram.sh $f
+        return $?
+
+    else
+        echo "No firmware found"
+        return 20
+    fi
+}
+
+
+jnrd6040_firstboot_set_mac() {
+    # Get the MAC address of the JN51xx
+    mac=`/usr/bin/JennicModuleProgram.sh | grep MAC | sed -e "s/MAC Address:   //g" | awk 'BEGIN {FS=":"} {print $1":"$2":"$3":"$6":"$7":"$8}'`
+
+    # Validate mac address
+
+    echo "Setting MAC address to $mac"
+
+    # Set the MAC address in the uboot environment.
+    /usr/sbin/fw_setenv ethaddr $mac
+    return $?
+}
+
+
+jnrd6040_firstboot_done() {
+    # Turn off all other LEDs and wait 20 seconds for operator
+
+    # Turn off LED2
+    echo "none" > /sys/class/leds/jnrd6040:yellow:led2/trigger
+    echo 0 > /sys/class/leds/jnrd6040:yellow:led2/brightness
+
+    # Turn off LED5
+    echo "none" > /sys/class/leds/jnrd6040\:yellow\:led5/trigger
+    echo 255 > /sys/class/leds/jnrd6040\:yellow\:led5/brightness
+
+    sleep 20
+}
+
+jnrd6040_firstboot_success() {
+    echo "- JNRD6040 firstboot - Success :-) -"
+    # Green LED has inverted sense
+    echo 0 > /sys/class/leds/jnrd6040:green:led4/brightness
+
+    # Turn off LED3
+    echo "none" > /sys/class/leds/jnrd6040:red:led3/trigger
+    echo 0 > /sys/class/leds/jnrd6040:red:led3/brightness
+    jnrd6040_firstboot_done
+}
+
+
+jnrd6040_firstboot_fail() {
+    echo "- JNRD6040 firstboot - Failed :-( -"
+    # Turn on red LED3
+    echo "none" > /sys/class/leds/jnrd6040:red:led3/trigger
+    echo 255 > /sys/class/leds/jnrd6040:red:led3/brightness
+    jnrd6040_firstboot_done
+}
+
+
+jnrd6040_firstboot() {
+    # Check if the Ethernet address has been set yet,
+    if /usr/sbin/fw_printenv ethaddr | grep "00:15:8d:00:00:00" > /dev/null
+    then
+        echo "- JNRD6040 firstboot -"
+
+        jnrd6040_firstboot_program_jn516x && \
+        jnrd6040_firstboot_set_mac && \
+        jnrd6040_firstboot_success || jnrd6040_firstboot_fail
+
+    fi
+}
+
+
+boot_hook_add preinit_main jnrd6040_firstboot
