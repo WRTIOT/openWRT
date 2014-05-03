@@ -1,5 +1,5 @@
 
-TARGET=wrt160nl
+TARGET=tlwr703n
 
 include ../../Common.mk
 
