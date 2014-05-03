@@ -37,8 +37,7 @@ endef
 
 define Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)
-	tar -xzf $(DL_DIR)/$(JennicModuleProgrammer_FILENAME) -C $(PKG_BUILD_DIR)
-	[ "$?" != "0" ] && git clone $(JennicModuleProgrammer_URL) $(PKG_BUILD_DIR)/JennicModuleProgrammer
+	tar -xzf $(DL_DIR)/$(JennicModuleProgrammer_FILENAME) -C $(PKG_BUILD_DIR) || ([ "$?" != "0" ] && git clone $(JennicModuleProgrammer_URL) $(PKG_BUILD_DIR)/JennicModuleProgrammer)
 endef
 
 

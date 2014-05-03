@@ -39,8 +39,7 @@ endef
 
 define Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)
-	tar -xzf $(DL_DIR)/$(GatewayFactoryTest_FILENAME) -C $(PKG_BUILD_DIR)
-	[ "$?" != "0" ] && git clone $(GatewayFactoryTest_URL) $(PKG_BUILD_DIR)/GatewayFactoryTest
+	tar -xzf $(DL_DIR)/$(GatewayFactoryTest_FILENAME) -C $(PKG_BUILD_DIR) || ([ "$?" != "0" ] && git clone $(GatewayFactoryTest_URL) $(PKG_BUILD_DIR)/GatewayFactoryTest)
 endef
 
 
