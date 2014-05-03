@@ -19,23 +19,27 @@ PKG_INSTALL:=1
 # 6LoWPANd
 6LoWPANd_VERSION:=v0_14_RC1
 6LoWPANd_FILENAME:=6LoWPANd-$(6LoWPANd_VERSION).tar.gz
+6LowPANd_URL:=git://github.com/WRTIOT/6LoWPANd.git
 
 # JIPd
 JIPd_VERSION:=v0_5_RC1
 JIPd_FILENAME:=JIPd-$(JIPd_VERSION).tar.gz
+JIPd_URL:=git://github.com/WRTIOT/JIPd.git
 
 # libJIP
 libJIP_VERSION:=v1_1_1
 libJIP_FILENAME:=libJIP-$(libJIP_VERSION).tar.gz
+libJIP_URL:=git://github.com/WRTIOT/libJIP.git
 
 # JIPweb
 JIPweb_VERSION:=v1_4_RC2
 JIPweb_FILENAME:=JIPweb-$(JIPweb_VERSION).tar.gz
+JIPweb_URL:=git://github.com/WRTIOT/JIPweb.git
 
 # FWDistribution
 FWDistribution_VERSION:=v0_11
 FWDistribution_FILENAME:=FWDistribution-$(FWDistribution_VERSION).tar.gz
-
+FWDistribution_URL:=git://github.com/WRTIOT/FWDistribution.git
 
 
 include $(INCLUDE_DIR)/package.mk
@@ -142,6 +146,7 @@ endef
 # 6LoWPANd
 define Build/6LoWPAN-6LoWPANd/Prepare
 	tar -xzf $(DL_DIR)/$(6LoWPANd_FILENAME) -C $(PKG_BUILD_DIR)
+	[ "$?" != "0" ] && git clone $(6LoWPANd_URL) $(PKG_BUILD_DIR)/6LoWPANd
 endef
 
 define Build/6LoWPAN-6LoWPANd/Compile
@@ -152,6 +157,7 @@ endef
 # JIPd
 define Build/6LoWPAN-JIPd/Prepare
 	tar -xzf $(DL_DIR)/$(JIPd_FILENAME) -C $(PKG_BUILD_DIR)
+	[ "$?" != "0" ] && git clone $(JIPd_URL) $(PKG_BUILD_DIR)/JIPd
 endef
 
 define Build/6LoWPAN-JIPd/Compile
@@ -162,6 +168,7 @@ endef
 # libJIP
 define Build/6LoWPAN-libJIP/Prepare
 	tar -xzf $(DL_DIR)/$(libJIP_FILENAME) -C $(PKG_BUILD_DIR)
+	[ "$?" != "0" ] && git clone $(libJIP_URL) $(PKG_BUILD_DIR)/libJIP
 endef
 
 define Build/6LoWPAN-libJIP/Compile
@@ -181,6 +188,7 @@ endef
 # JIPweb
 define Build/6LoWPAN-JIPweb/Prepare
 	tar -xzf $(DL_DIR)/$(JIPweb_FILENAME) -C $(PKG_BUILD_DIR)
+	[ "$?" != "0" ] && git clone $(JIPweb_URL) $(PKG_BUILD_DIR)/JIPweb
 endef
 
 # Add include path for libjson to CFLAGS
@@ -194,6 +202,7 @@ endef
 # FirmwareDistribution
 define Build/6LoWPAN-FirmwareDistribution/Prepare
 	tar -xzf $(DL_DIR)/$(FWDistribution_FILENAME) -C $(PKG_BUILD_DIR)
+	[ "$?" != "0" ] && git clone $(FWDistribution_URL) $(PKG_BUILD_DIR)/FWDistribution
 endef
 
 define Build/6LoWPAN-FirmwareDistribution/Compile

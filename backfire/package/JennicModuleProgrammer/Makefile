@@ -12,6 +12,7 @@ PKG_NAME:=JennicModuleProgrammer
 PKG_RELEASE:=v0_6
 
 JennicModuleProgrammer_FILENAME:=$(PKG_NAME)-$(PKG_RELEASE).tar.gz
+JennicModuleProgrammer_URL:=git://github.com/WRTIOT/JennicModuleProgrammer.git
 
 PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
@@ -37,6 +38,7 @@ endef
 define Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)
 	tar -xzf $(DL_DIR)/$(JennicModuleProgrammer_FILENAME) -C $(PKG_BUILD_DIR)
+	[ "$?" != "0" ] && git clone $(JennicModuleProgrammer_URL) $(PKG_BUILD_DIR)/JennicModuleProgrammer
 endef
 
 
